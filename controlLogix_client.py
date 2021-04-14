@@ -1,21 +1,32 @@
 # Roy Teneij
 from pycomm3 import LogixDriver, CIPDriver, Services
 
-def getPlcInfo():
+def getPlc():
 	with LogixDriver('10.0.111.5') as plc:
 		return(plc)
+def getPlcInfo():
+	with LogixDriver('10.0.111.5') as plc:
+		return(plc.info)
 
 def getTags():
 	with LogixDriver('10.0.111.5') as plc:
-		return plc.tags
+		return plc.get_tag_list()
 
 def readTag(tagName):
 	with LogixDriver('10.0.111.5') as plc:
 		return plc.read(tagName)
 
-def writeTag():
+def readTagInfo(tagName):
 	with LogixDriver('10.0.111.5') as plc:
-		data = {'tag_name': 'System_In_Simulation', 'dim': 0, 'instance_id': 448, 'symbol_address': 1879793412, 'symbol_object_address': 1947314424, 'software_control': 1140916492, 'alias': False, 'external_access': 'Read/Write', 'dimensions': [0, 0, 0], 'tag_type': 'atomic', 'data_type': 'BOOL', 'data_type_name': 'BOOL', 'bit_position': 0}
+		return plc.get_tag_info(tagName)
+
+def writeTag(tagName, value):
+	with LogixDriver('10.0.111.5') as plc:
+		return plc.write((tagName, value))
+
+def writeSimulationTag(bool):
+	with LogixDriver('10.0.111.5') as plc:
+		data = {'tag_name': 'System_In_Simulation', 'dim': 0, 'instance_id': 448, 'symbol_address': 1879793412, 'symbol_object_address': 1947314424, 'software_control': 1140916492, 'alias': bool, 'external_access': 'Read/Write', 'dimensions': [0, 0, 0], 'tag_type': 'atomic', 'data_type': 'BOOL', 'data_type_name': 'BOOL', 'bit_position': 0}
 		return plc.write(('System_In_Simulation', data))
 
 def getIPConfig():
